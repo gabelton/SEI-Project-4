@@ -173,7 +173,7 @@ class UserProfile extends React.Component {
               {contacts.map(contact =>
                 <div className="column has-text-centered" key={contact.id}>
                   <figure className="image is-128x128">
-                    <img src={`/../../../assets/${contact.avatar}`} />
+                    <img src={contact.avatar} />
                   </figure>
                   <h1 className="title is-4">{contact.username}</h1>
                   {contact.matches.map(keyword =>

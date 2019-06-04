@@ -23,6 +23,7 @@ class New extends React.Component {
     this.handleArtistSelect = this.handleArtistSelect.bind(this)
   }
 
+
   handleSelect(keywords){
     const keywordIds = keywords.map(keyword => keyword.value)
     const data = { ...this.state.data, keyword_ids: keywordIds }
@@ -46,7 +47,7 @@ class New extends React.Component {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(() => this.props.history.push('/events'))
-      .catch(err => this.setState({ errors: err.response.data.errors }))
+      .catch(err => console.log(err.response.data))
   }
 
   handleSubmit(e) {

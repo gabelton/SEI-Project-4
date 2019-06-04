@@ -4,7 +4,8 @@ import Select from 'react-select'
 
 
 
-const Form = ({ handleSelect, handleArtistSelect,handleChange, handleSubmit, data, errors, options, artistOptions}) => {
+const Form = ({ handleSelect, handleArtistSelect, artistOptions, handleChange, handleSubmit, data, errors, options}) => {
+
   console.log(data.name)
   return (
     <section className="section">

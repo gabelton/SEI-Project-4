@@ -18,7 +18,7 @@ def geolocate(record):
         print(res)
         json = res.json()
 
-        
+
 
         if json['results']:
 

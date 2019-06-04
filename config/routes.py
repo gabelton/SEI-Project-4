@@ -1,6 +1,6 @@
-
-from app import app
 import os
+from app import app
+
 from controllers import auth, events, keywords, artists, contacts
 
 
