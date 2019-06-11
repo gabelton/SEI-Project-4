@@ -93,20 +93,32 @@ This section was somewhat challenging because we had not worked with dates in Py
 
 ## User Profile
 
-Because customisation based on the user was really important to our project, we dedicated a substantial amount of time to develop a user profile page where the users could see events created by them, view and edit their preferences and see other users with same preferences. The user can also choose to see ticket prices displayed on the exhibition at full or concession price.
+
 
 ![User details page](readme-assets/user-info.png)
 
-```
-@router.route('/me', methods=['PUT'])
-@db_session
-@secure_route
-def edit_profile():
+Because customisation based on the user was really important to our project, we dedicated a substantial amount of time to develop a user profile page.
+The user can edit their profile information, ticket type (concession or full price) and set new preferences.
 
-    schema = UserSchema()
-    data = request.get_json()
-    if data.get('concession'):
-        data['concession'] = data['concession'] == 'true'
+
+When the user edits their profile, a put request is made to our API.
+
+
+There was two specific cases that we had to work with: the user setting new preferences and the user changing ticket type.
+
+The ticket type was a boolean set to True or False. As the put request had a json format (true or false would be a string), when the backend received the request it had to set data['concession'] to be a python true or false, before updating the user.
+
+```
+if data.get('concession'):
+    data['concession'] = data['concession'] == 'true'
+```
+
+When the user set new preferences (or keywords), we wanted for them to be added to the existing ones rather than overwriting them. We had to create a new list that concatenated the previous keywords of the current user with the new keywords before updating the user.
+Because the keywords were referenced data, they were written in json as ids to then in post_load populate them with the corresponding keyword data.
+
+
+
+```
     if data.get('keyword_ids'):
         print(g.current_user.keywords)
         previousKeywords = []
@@ -120,12 +132,18 @@ def edit_profile():
     return schema.dumps(user_info)
 ```
 
+
+### Match users with similar interests
+
+
+
 ![User contacts page](readme-assets/user-contacts.png)
 
+
+Selects all the users except the current one that have a matching keyword.
+In the matched users, get the specific keywords that match with the current user.
+
 ```
-@router.route('/contacts', methods=['GET'])
-@db_session
-@secure_route
 def get_contacts():
 
     def intersection(listA, listB):
@@ -143,7 +161,6 @@ def get_contacts():
     users = list(map(lambda user: {'username': user.username, 'matches': get_keywords(user.keywords), 'id': user.id, 'avatar': user.avatar}, users))
 
     return jsonify({'users': users})
-
 ```
 
 ## Future Features
@@ -154,8 +171,9 @@ Messaging service using a third-party API to connect the user with users with si
 
 ### More accurate map results
 
-Implement an option for when the user is creating a new event, to double check the position in the map, before setting the address for the event. This would fix a small issue with the wrong coordinates being set for the event location, as certain galleries not being recognised by OpenCage API.
+There is a small bug with the wrong coordinates being set for the event location, as certain galleries are currently not being recognised by OpenCage API.
 
+Implement an option for when the user is creating a new event, to double check the position in the map, before setting the address for the event.
 ### Incorporating museums API
 
-We would also like to do some more research into the current state of museum APIs and how these might supplement our artist model.
+We would also like to utilise museum APIs to see how these might supplement our artist model.
