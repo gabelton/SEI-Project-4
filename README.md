@@ -41,7 +41,7 @@ Canvas showcases art exhibitions and events in London, based on user preferences
 
 ## Introduction
 
-Week long project in collaboration with Violeta Paez.
+Week long project in collaboration with [Violeta Paez](https://github.com/vpaez).
 
 At university we both came into regular contact with the art world. London possesses a dizzying range of galleries and events. Sometimes sifting through these different options can feel a touch overwhelming. Working as part of a pair, we designed an app to help users filter art events around the city, making use of a ‘keywords’ model to connect users with similar taste and to provide tailored recommendations based on their interests.
 
