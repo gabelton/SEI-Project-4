@@ -41,13 +41,11 @@ Canvas showcases art exhibitions and events in London, based on user preferences
 
 ## Introduction
 
-Week long project in collaboration with Gabe Naughton.
+Week long project in collaboration with Violeta Paez.
 
-Rewrite/At university I became increasingly interested in Art History and since moving to London only a few months ago, I have tried to take advantage of the city’s incredible range of galleries and events./ Working as part of a pair, we designed an app to help users filter art events around the city, making use of a ‘keywords’ model to connect users with similar taste and to provide tailored recommendations based on their interests.
+At university we both came into regular contact with the art world. London possesses a dizzying range of galleries and events. Sometimes sifting through these different options can feel a touch overwhelming. Working as part of a pair, we designed an app to help users filter art events around the city, making use of a ‘keywords’ model to connect users with similar taste and to provide tailored recommendations based on their interests.
 
-We separated our workload into frontend and backend and we switched roles frequently.
-
-I did....
+Initially we divided responsibilities across the front and back ends. I was excited by Python and so took the lead in creating our initial models, as we worked towards our minimum viable product. After we reached this point, however, we swapped over roles, adding a new artist model on the backend, while I got the opportunity to use Mapbox for the first time and work on filtering events by date, which required me to adapt the models on the backend while working with Javascript’s sometimes unwieldy Date functionality on the front end. I then focused on the ‘events near you’ section of the homepage, the first time I had been required to make third party API requests from the back end.
 
 
 ## Personalised/Tailored Results
@@ -59,6 +57,27 @@ The different exhibition lists on canvas respond to the user. They're based on t
 ![Events near you](readme-assets/near-you.png)
 
 This section required us to carefully rethink our initial approach and adopt a new strategy. At first we had tried to handle requests from the front end only, though we began to realise that this was an inefficient system, which quickly consumed Opencage API requests. At this point we opted to set location as a property in the backend, the first time we had used ‘before_insert’ and ‘before_update’ hooks, and to write conditions in Python to check that the requests had been successful.
+
+```
+def geolocate(record):
+    params = {
+        'q': record.venue,
+        'key': os.getenv('OPENCAGE_KEY')
+    }
+    try:
+        res = requests.get('https://api.opencagedata.com/geocode/v1/json', params)
+        print(res)
+        json = res.json()
+
+
+        if json['results']:
+
+            record.lat = json['results'][0]['geometry']['lat']
+            record.lng = json['results'][0]['geometry']['lng']
+        else:
+            record.lat = 51.509865
+            record.lng = -0.118092
+```
 
 ## Based on taste
 
@@ -85,10 +104,32 @@ matchedEvents(){
 
 ![Filter by date](readme-assets/filter-by-date.png)
 
-With the option to filter by past, current and upcoming exhibitions using React Select.
 This section was somewhat challenging because we had not worked with dates in Python before. We had to import functionality from datetime in our seeds file before employing the strftime() method. On the frontend we then had to translate this string into a format JavaScript recognised as a date before parsing this date, so that we could compare different results and filter according to whether they were past, current or upcoming exhibitions using React Select.
 
 ![Current events](readme-assets/whats-on.png)
+
+```
+function whatsOn(arr) {
+  return arr.filter(exhib => {
+
+    const startSplitDate = exhib.start_date.split('/')
+    const startMonth = startSplitDate[1] - 1
+    const startDate = new Date(startSplitDate[2], startMonth, startSplitDate[0])
+
+    const endSplitDate = exhib.end_date.split('/')
+    const endMonth = endSplitDate[1] - 1
+    const endDate = new Date(endSplitDate[2], endMonth, endSplitDate[0])
+
+    const startParsed = Date.parse(startDate)
+    const endParsed = Date.parse(endDate)
+    const currentParsed = Date.parse(new Date())
+
+    if (currentParsed > startParsed && currentParsed < endParsed ){
+      return exhib
+    }
+  })
+}
+```
 
 
 ## User Profile
