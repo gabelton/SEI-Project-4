@@ -200,3 +200,7 @@ Implement an option for when the user is creating a new event, to double check t
 ### Incorporating museums API
 
 We would also like to do some more research into the current state of museum APIs and how these might supplement our artist model.
+
+### Responsiveness
+
+We still need to add classes in Bulma to make certain elements, such as the Navbar, display on mobile. We also need to modify the main image on the homepage, so that it displays fully on a projector or large screen.
