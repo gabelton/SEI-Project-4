@@ -19,7 +19,6 @@ def geolocate(record):
         json = res.json()
 
 
-
         if json['results']:
 
             record.lat = json['results'][0]['geometry']['lat']
@@ -27,7 +26,6 @@ def geolocate(record):
         else:
             record.lat = 51.509865
             record.lng = -0.118092
-
 
 
 
