@@ -8,3 +8,7 @@ app.register_blueprint(events.router, url_prefix='/api')
 app.register_blueprint(keywords.router, url_prefix='/api')
 app.register_blueprint(artists.router, url_prefix='/api')
 app.register_blueprint(contacts.router, url_prefix='/api')
+
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
