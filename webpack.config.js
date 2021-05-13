@@ -13,7 +13,6 @@ module.exports = {
   entry: './src/app.js',
   output: {
     path: path.resolve('public'),
-    publicPath: 'https://canvas-art.herokuapp.com/public/bundle.js',
     filename: 'bundle.js'
   },
   devtool: 'source-maps',

@@ -1,7 +1,7 @@
 from flask import Flask
 from pony.orm import Database
 from config.environment import db_uri
-app = Flask(__name__, static_folder='public')
+app = Flask(__name__, static_folder='public', static_url_path='')
 db = Database()
 db.bind('postgres', db_uri)
 # from models.Event import Event
