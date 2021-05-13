@@ -11,6 +11,5 @@ db.bind('postgres', db_uri)
 
 from config import routes
 
-app.config["APPLICATION_ROOT"] = "/api/"
 
 db.generate_mapping(create_tables=True)
